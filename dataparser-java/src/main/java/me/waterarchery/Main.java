@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -11,12 +12,12 @@ import java.util.List;
 
 public class Main {
 
-    public final static String FILE_PATH = "C:\\Users\\smfar\\IdeaProjects\\DataChanger\\src\\main\\resources\\dataset.csv";
-    public final static String OUTPUT_FILE_PATH = "C:\\Users\\smfar\\IdeaProjects\\DataChanger\\src\\main\\resources\\output.csv";
+    public final static URL FILE_PATH = Main.class.getResource("dataset.csv");
+    public final static URL OUTPUT_FILE_PATH = Main.class.getResource("output.csv");
 
     public static void main(String[] args) throws IOException {
         long lineNumber = 1;
-        CSVReader reader = new CSVReader(new FileReader(FILE_PATH));
+        CSVReader reader = new CSVReader(new FileReader(FILE_PATH.getFile()));
 
         List<String[]> csvBody = new ArrayList<>(readCSV(reader));
         List<String[]> untochedCSVBody = new ArrayList<>(csvBody);
@@ -253,7 +254,7 @@ public class Main {
 
     public static void saveCSV(List<String[]> csvBody) {
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter(OUTPUT_FILE_PATH));
+            CSVWriter writer = new CSVWriter(new FileWriter(OUTPUT_FILE_PATH.getFile()));
             writer.writeAll(csvBody);
             writer.flush();
             writer.close();
@@ -268,7 +269,7 @@ public class Main {
     }
 
     public static int getLineCount() {
-        Path filePath = Path.of(FILE_PATH);
+        Path filePath = Path.of(FILE_PATH.getFile());
         try (Reader reader = Files.newBufferedReader(filePath)) {
             try (CSVReader csvReader = new CSVReader(reader)) {
                 return csvReader.readAll().size();
